@@ -1,0 +1,6 @@
+{
+  "name": "StickHabit™",
+  "description": "A high-performance daily habit tracker and productivity app with a localized affiliate reward store.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
