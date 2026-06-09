@@ -16,27 +16,27 @@ jobs:
       with:
         distribution: 'zulu'
         java-version: '17'
-        cache: 'gradle'
 
-    - name: Find Gradle and Build APK
-      run: |
-        # البحث عن المجلد الذي يحتوي على ملف gradlew والدخول إليه
-        GRADLEW_PATH=$(find . -name "gradlew" -print -quit)
-        if [ -z "$GRADLEW_PATH" ]; then
-          echo "Error: gradlew file not found anywhere in the repository!"
-          exit 1
-        fi
-        GRADLE_DIR=$(dirname "$GRADLEW_PATH")
-        echo "Found gradlew in directory: $GRADLE_DIR"
-        cd "$GRADLE_DIR"
-        
-        # إعطاء صلاحيات التشغيل وبدء بناء الـ APK
-        chmod +x ./gradlew
-        ./gradlew assembleDebug
+    # خطوة سحرية: تثبيت أداة Gradle على السيرفر مباشرة لأنها ناقصة في المستودع
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
 
+    # إنشاء ملفات تشغيل الـ Gradle أوتوماتيكياً
+    - name: Initialize Gradle Wrapper
+      run: gradle wrapper
+
+    # منح صلاحية التشغيل للملف الذي تم إنشاؤه للتو
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    # بناء الـ APK مع إجبار السيرفر على تجاوز إعدادات التوقيع المذكورة في الـ README
+    - name: Build APK (Debug)
+      run: ./gradlew assembleDebug
+
+    # رفع ملف الـ APK النهائي لك لتحميله
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: HabitRewards-APK
+        name: StickHabit-APK
         path: |
           **/build/outputs/apk/debug/*.apk
