@@ -19,13 +19,13 @@ jobs:
         cache: 'gradle'
 
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: chmod +x ./HabitRewards/gradlew
 
     - name: Build APK (Debug)
-      run: ./gradlew assembleDebug
+      run: ./HabitRewards/gradlew assembleDebug --project-dir ./HabitRewards
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
         name: HabitRewards-APK
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: HabitRewards/app/build/outputs/apk/debug/app-debug.apk
